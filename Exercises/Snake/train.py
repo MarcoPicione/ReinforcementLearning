@@ -18,16 +18,12 @@ cols = 22
 tot_episodes = 10000000
 
 
-def run(episodes, render = False):
+def run(episodes, use_nn, render = False):
     env = gym.make("snake-v0", rows=rows, cols=cols, render_mode="human" if render else None)
     env = TimeLimit(env, max_episode_steps=10000)
-    # Construct tuple
-    # t = []
-    # for i in range(2 + env.unwrapped.snake.snake_body_max):
-    #         t += [env.unwrapped.rows, env.unwrapped.cols]
 
     q = np.zeros((2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, env.action_space.n))
-    # print(q.shape)
+
 
     lr = 0.9
     df = 0.9
