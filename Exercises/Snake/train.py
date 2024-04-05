@@ -15,7 +15,7 @@ global cols
 global tot_episodes
 rows = 12
 cols = 12
-tot_episodes = 100000
+tot_episodes = 1000000
 
 
 def run(episodes, render = False):

@@ -67,10 +67,10 @@ class SnakeEnv(gym.Env):
 
         dist_now = np.linalg.norm(np.array(self.snake.snake_head_pos)-np.array(self.snake.food_pos))
         dist_prev = np.linalg.norm(np.array(self.snake.snake_head_pos_prev)-np.array(self.snake.food_pos))
-        # if dist_now < dist_prev:
-        #     reward = 1
-        # else:
-        #     reward = -2
+        if dist_now < dist_prev:
+            reward = 10
+        else:
+            reward = -20
 
         if food_reached:
             reward = 100

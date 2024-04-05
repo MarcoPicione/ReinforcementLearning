@@ -20,19 +20,22 @@ tot_episodes = 1000000
 def main():
     name = "q_tables/q_table_400000.npy"
     name = "learned_q_"+str(tot_episodes)+".npy"
+    name = "saved_q_tables/q_no_dist.npy"
     q = np.load(name)
     # print(q)
 
     # input()
     seed = np.random.randint(100, 10000)
-    # seed = 1597
+    seed = 2264
     env = gym.make("snake-v0", rows=rows, cols=cols, render_mode="human")
+    env = TimeLimit(env, max_episode_steps=10)
     state = env.reset(seed=seed)[0]
     terminated = False
+    truncated = False
     reward_tot = 0
-    while not terminated:
+    while (not terminated and not truncated):
         action = np.argmax(q[tuple(state)])
-        new_state, reward, terminated, _, info = env.step(action)
+        new_state, reward, terminated, truncated, info = env.step(action)
         reward_tot += reward
         time.sleep(0.01)
         state = new_state
