@@ -25,7 +25,6 @@ class Snake():
     def __init__(self, rows, cols, seed = None):
         self.rows = rows
         self.cols = cols
-        self.snake_body = []
         self.snake_body_max = np.inf
         self.reset(seed)
 
@@ -40,6 +39,7 @@ class Snake():
         self.snake_body = []
         self.body_dim = 0
         self.direction = SnakeAction(np.random.randint(0,4))
+        self.score = 0
 
         # Initialize food starting position
         self.food_pos = [
@@ -92,6 +92,7 @@ class Snake():
         food_found = False
         if self.snake_head_pos == self.food_pos:
             food_found = True
+            self.score += 1
             self.food_pos = [
                 random.randint(1, self.rows-2),
                 random.randint(1, self.cols-2)
@@ -103,9 +104,9 @@ class Snake():
 
     def add_body(self):
         if self.body_dim == 0:
-            self.snake_body = [[self.snake_head_pos[0], self.snake_head_pos[1] - 1]]
+            self.snake_body = [[self.snake_head_pos[0], self.snake_head_pos[1] + 1]]
         else:
-            self.snake_body.append([self.snake_body[-1][0], self.snake_body[-1][1] - 1])
+            self.snake_body.append([self.snake_body[-1][0], self.snake_body[-1][1] + 1])
         self.body_dim += 1
 
     def build_state(self):

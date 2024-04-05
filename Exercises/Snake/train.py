@@ -13,14 +13,14 @@ from gym.wrappers import TimeLimit
 global rows
 global cols
 global tot_episodes
-rows = 22
-cols = 22
-tot_episodes = 10000000
+rows = 12
+cols = 12
+tot_episodes = 100000
 
 
 def run(episodes, render = False):
     env = gym.make("snake-v0", rows=rows, cols=cols, render_mode="human" if render else None)
-    env = TimeLimit(env, max_episode_steps=10000)
+    env = TimeLimit(env, max_episode_steps=1000)
     # Construct tuple
     # t = []
     # for i in range(2 + env.unwrapped.snake.snake_body_max):

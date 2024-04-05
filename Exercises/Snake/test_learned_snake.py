@@ -21,29 +21,26 @@ def main():
     name = "q_tables/q_table_400000.npy"
     name = "learned_q_"+str(tot_episodes)+".npy"
     q = np.load(name)
-    print(q)
+    # print(q)
 
-    input()
-    seed = 123
+    # input()
+    seed = np.random.randint(100, 10000)
+    # seed = 1597
     env = gym.make("snake-v0", rows=rows, cols=cols, render_mode="human")
     state = env.reset(seed=seed)[0]
     terminated = False
     reward_tot = 0
     while not terminated:
         action = np.argmax(q[tuple(state)])
-        print("Action ", action)
         new_state, reward, terminated, _, info = env.step(action)
         reward_tot += reward
-        print(reward_tot)
-        print("State ",state)
-        print("food ", env.unwrapped.snake.food_pos)
-        print("snake ", env.unwrapped.snake.snake_head_pos_prev)
-        time.sleep(0.05)
+        time.sleep(0.01)
         state = new_state
-
-
-
+        score = env.unwrapped.snake.score
     env.close()
+
+    print("SCORE: ", score)
+    print("SEED ", seed)
 
 
     

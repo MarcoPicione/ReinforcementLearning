@@ -67,10 +67,10 @@ class SnakeEnv(gym.Env):
 
         dist_now = np.linalg.norm(np.array(self.snake.snake_head_pos)-np.array(self.snake.food_pos))
         dist_prev = np.linalg.norm(np.array(self.snake.snake_head_pos_prev)-np.array(self.snake.food_pos))
-        if dist_now < dist_prev:
-            reward = 1
-        else:
-            reward = -2
+        # if dist_now < dist_prev:
+        #     reward = 1
+        # else:
+        #     reward = -2
 
         if food_reached:
             reward = 100
@@ -78,18 +78,18 @@ class SnakeEnv(gym.Env):
             #     terminated = True
         
         if body_encountered:
-            reward = -1000
+            # reward = -1000
             terminated = True
-            if(self.render_mode=="human"): 
-                print("Body collision")
-                input()
+            # if(self.render_mode=="human"): 
+            #     print("Body collision")
+            #     input()
 
         if obstacle_encountered:
-            reward = -1000
+            # reward = -1000
             terminated = True
-            if(self.render_mode=="human"): 
-                print("Obstacle collision")
-                input()
+            # if(self.render_mode=="human"): 
+            #     print("Obstacle collision")
+            #     input()
 
         # observation = np.concatenate((self.snake.snake_head_pos, self.snake.food_pos, flatten(self.snake.snake_body))).astype(np.int32)
         observation = self.snake.build_state().astype(np.int8)
