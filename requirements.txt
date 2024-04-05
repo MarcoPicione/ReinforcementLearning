@@ -3,4 +3,5 @@ scipy
 matplotlib
 ipython
 gymnasium
+gym
 pygame
