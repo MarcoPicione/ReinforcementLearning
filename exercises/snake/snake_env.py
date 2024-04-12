@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import Snake as s
+import exercises.snake.snake as s
 
 import gymnasium as gym
 from gymnasium import spaces
