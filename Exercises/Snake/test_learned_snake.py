@@ -1,49 +1,24 @@
 #!/usr/bin/env python
 import SnakeEnv
 import gymnasium as gym
-from gymnasium import spaces
-from gymnasium.utils.env_checker import check_env
-from gymnasium.envs.registration import register
-import matplotlib.pyplot as plt
-import os
-import time
 import numpy as np
-from gym.wrappers import TimeLimit
-
-global rows
-global cols
-global tot_episodes
-rows = 22
-cols = 22
-tot_episodes = 1000000
+import time
+from algorithms.enviroment_tester import enviroment_tester
 
 def main():
-    name = "q_tables/q_table_400000.npy"
-    name = "learned_q_"+str(tot_episodes)+".npy"
-    name = "saved_q_tables/q_no_dist.npy"
-    q = np.load(name)
-    # print(q)
+    name ="learned_q_snake-v0_100000_episodes_sarsa.npy"
+    name ="learned_q_snake-v0_10000_episodes_1_step_sarsa.npy"
 
-    # input()
+    q = np.load(name)
     seed = np.random.randint(100, 10000)
-    seed = 2264
-    env = gym.make("snake-v0", rows=rows, cols=cols, render_mode="human")
-    env = TimeLimit(env, max_episode_steps=10)
-    state = env.reset(seed=seed)[0]
-    terminated = False
-    truncated = False
-    reward_tot = 0
-    while (not terminated and not truncated):
-        action = np.argmax(q[tuple(state)])
-        new_state, reward, terminated, truncated, info = env.step(action)
-        reward_tot += reward
-        time.sleep(0.01)
-        state = new_state
-        score = env.unwrapped.snake.score
+    env = gym.make("snake-v0", rows=27, cols=27, render_mode="human")
+    failing_state, reward_tot = enviroment_tester(env, q, seed = seed).test()
     env.close()
 
-    print("SCORE: ", score)
+    print("SCORE: ", env.unwrapped.snake.score)
+    print("REWARD: ", reward_tot)
     print("SEED ", seed)
+    print("FAILING STATE ", failing_state)
 
 
     

@@ -25,29 +25,13 @@ class SnakeEnv(gym.Env):
         self.snake = s.Snake(rows, cols)
         self.food_counter = 0
         self.action_space = spaces.Discrete(len(s.SnakeAction) - 1)
-
-        # Build low and high list
-        # l = [0, 0, 0, 0]
-        # h = []
-        # for i in range(self.snake.snake_body_max):
-        #     l += [-1, -1]
-
-        # for i in range(2 + self.snake.snake_body_max):
-        #     h += [self.rows-1, self.cols-1]
-
-        self.observation_space = spaces.Box(
-            low = 0,
-            high=np.ones(11),
-            # shape = (4,),
-            dtype = np.int8
-        )
+        self.observation_space = spaces.Discrete(2**11)
     
     def reset(self, seed=None, options=None):
-        super().reset(seed=seed) # gym requires this call to control randomness and reproduce scenarios.
+        super().reset(seed=seed)
         self.snake.reset(seed=seed)
         self.food_counter = 0
-        obs = observation = self.snake.build_state().astype(np.int8)
-        np.concatenate((self.snake.snake_head_pos, self.snake.food_pos, flatten(self.snake.snake_body))).astype(np.int32)
+        obs = self.snake.build_state()
         info = {}
 
         if(self.render_mode=='human'):
@@ -65,34 +49,18 @@ class SnakeEnv(gym.Env):
         reward = 0
         terminated = False
 
-        dist_now = np.linalg.norm(np.array(self.snake.snake_head_pos)-np.array(self.snake.food_pos))
-        dist_prev = np.linalg.norm(np.array(self.snake.snake_head_pos_prev)-np.array(self.snake.food_pos))
-        if dist_now < dist_prev:
-            reward = 10
-        else:
-            reward = -20
-
         if food_reached:
             reward = 100
-            # if(self.food_counter == 10):
-            #     terminated = True
         
         if body_encountered:
             # reward = -1000
             terminated = True
-            # if(self.render_mode=="human"): 
-            #     print("Body collision")
-            #     input()
 
         if obstacle_encountered:
             # reward = -1000
             terminated = True
-            # if(self.render_mode=="human"): 
-            #     print("Obstacle collision")
-            #     input()
 
-        # observation = np.concatenate((self.snake.snake_head_pos, self.snake.food_pos, flatten(self.snake.snake_body))).astype(np.int32)
-        observation = self.snake.build_state().astype(np.int8)
+        observation = self.snake.build_state()
         info = {}
         truncated = False
 
@@ -102,25 +70,14 @@ class SnakeEnv(gym.Env):
         return observation, reward, terminated, truncated, info
     
 def main():
-    env = gym.make("snake-v0", rows=12, cols=12, render_mode="human")
+    env = gym.make("snake-v0", rows=12, cols=12, render_mode=None)
     print("Check env begin")
     print(env.unwrapped)
     check_env(env.unwrapped)
     print("Check env end")
-    obs = env.reset()[0]
     
-
-    for i in range(10):
-        rand_action = env.action_space.sample()
-        obs, rew, terminated, trunvcated, info = env.step(rand_action)
-
-    env.unwrapped.snake.add_body() 
-
-    for i in range(10):
-        rand_action = env.action_space.sample()
-        obs, rew, terminated, trunvcated, info = env.step(rand_action)
-
-    print(SnakeEnv.observation_space.shape)
+    # Sometimes is deterministic other times not
+    # I do not understand
 
 if __name__== '__main__':
     main()

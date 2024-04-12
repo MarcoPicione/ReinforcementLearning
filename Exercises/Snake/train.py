@@ -9,16 +9,27 @@ import os
 import time
 import numpy as np
 from gym.wrappers import TimeLimit
+from algorithms.sarsa import sarsa
+from algorithms.n_step_sarsa import n_step_sarsa
 
 global rows
 global cols
 global tot_episodes
 rows = 12
 cols = 12
-tot_episodes = 1000000
+tot_episodes = 10000
 
 
 def run(episodes, render = False):
+    # empty folder
+    folder = "./q_tables/"
+    files = os.listdir(folder)
+    for file in files:
+        if file.endswith(".npy"):
+            path = os.path.join(folder, file)
+            os.remove(path)
+            
+
     env = gym.make("snake-v0", rows=rows, cols=cols, render_mode="human" if render else None)
     env = TimeLimit(env, max_episode_steps=1000)
     # Construct tuple
@@ -29,7 +40,7 @@ def run(episodes, render = False):
     q = np.zeros((2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, env.action_space.n))
     # print(q.shape)
 
-    lr = 0.9
+    lr = 0.1
     df = 0.9
     eps = 1
     eps_decay_rate = 1 / episodes / 100
@@ -42,6 +53,7 @@ def run(episodes, render = False):
         state = env.reset()[0]
         terminated = False
         truncated = False
+        episode_reward = 0
         while (not terminated and not truncated):
             state_idx = tuple(state)
             if rng.random() < eps:
@@ -52,7 +64,9 @@ def run(episodes, render = False):
                 # print("not random ", action, "state ", state)
             
             new_state, reward, terminated, truncated, info = env.step(action)
+            # print("typeee ", type(new_state))
             # if(reward > 1): print("Gotcha")
+            episode_reward += reward
 
             new_state_idx = tuple(new_state)
             action_state_idx = tuple(state) + (action,)
@@ -68,8 +82,7 @@ def run(episodes, render = False):
             lr = 0.0001
 
         # plot stuff
-        if(reward == 1):
-            rewards[i] = 1
+        rewards[i] = episode_reward
 
         if (i % (tot_episodes / 100) == 0): 
             print("Training ", i / tot_episodes * 100, " %", end='\r')
@@ -81,36 +94,26 @@ def run(episodes, render = False):
     # plot stuff
     sum_rewards = np.zeros(episodes)
     for t in range(episodes):
-        sum_rewards[t] = np.sum(rewards[max(0, t-1000):(t+1)])
+        sum_rewards[t] = np.sum(rewards[max(0, int(t-tot_episodes/100)):(t+1)])
     plt.plot(sum_rewards)
     plt.savefig('snake'+str(rows)+'x'+str(cols)+'.png')
     name = "learned_q_"+str(tot_episodes)+".npy"
     np.save(name, q)
+    print(rewards)
 
 def main():
-    train = True
-    name = "learned_q_"+str(tot_episodes)+".npy"
-    if not os.path.isfile(name) or train:
-        run(tot_episodes, render = False)
+    num_episodes = 10000
+    env = gym.make("snake-v0", rows=rows, cols=cols, render_mode=None)
+    env = TimeLimit(env, max_episode_steps=1000)
+    params ={'eps' : 1,
+             'learning_rate' : 0.005,
+             'discount_factor' : 0.95,
+             'eps_decay_rate' : 1 / num_episodes / 100
+            }
     
-    q = np.load(name)
-    print(q)
-    env = gym.make("snake-v0", rows=rows, cols=cols, render_mode="human")
-    state = env.reset()[0]
-    terminated = False
-    while not terminated:
-        action = np.argmax(q[tuple(state)])
-        print("Action ", action)
-        new_state, reward, terminated, _, info = env.step(action)
-        print(reward)
-        time.sleep(0.1)
-        print("New state ",new_state)
-        state = new_state
-
-    env.close()
-
-
-    
+    trainer = n_step_sarsa(1, env, num_episodes, params)
+    trainer.run()
+    env.close()   
 
 if __name__== '__main__':
     main()

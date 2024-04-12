@@ -15,8 +15,8 @@ global cols
 global tot_episodes
 global num
 
-rows = 22
-cols = 22
+rows = 27
+cols = 27
 num = 1000
 
 def main():
@@ -33,14 +33,13 @@ def main():
     for idx, q in enumerate(q_tables):
         for i in range(num):
             seed = np.random.randint(100, 10000)
-            # print(i, " : ", seed)
             env = gym.make("snake-v0", rows=rows, cols=cols, render_mode=None)
             env = TimeLimit(env, max_episode_steps=1000)
             state = env.reset(seed=seed)[0]
             terminated = False
             truncated = False
             while (not terminated and not truncated):
-                action = np.argmax(q[tuple(state)])
+                action = np.argmax(q[state])
                 new_state, reward, terminated, truncated, info = env.step(action)
                 state = new_state
                 score = env.unwrapped.snake.score
