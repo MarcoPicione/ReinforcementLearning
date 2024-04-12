@@ -7,6 +7,7 @@ import os
 def run(episodes, is_slippery, render = False):
     env = gym.make('FrozenLake-v1', desc=None, map_name="8x8", is_slippery=is_slippery, render_mode="human" if render else None)
     q = np.zeros((env.observation_space.n, env.action_space.n))
+    print("AAAAAAAAAAAAAA")
 
     lr = 0.9
     df = 0.9
@@ -29,8 +30,8 @@ def run(episodes, is_slippery, render = False):
             
             new_state, reward, terminated, truncated, info = env.step(action)
 
-            # if(reward == 1):
-            #     print("Gotcha")
+            if(reward == 1):
+                print("Gotcha")
 
             q[state, action] = q[state, action] + lr * (reward + df * np.max(q[new_state,:]) - q[state,action])
             state = new_state
@@ -62,7 +63,7 @@ def main():
     is_slippery = False
     name = "learned_q_" + str(is_slippery) + ".npy"
     if not os.path.isfile(name) or train:
-        run(50000, False, render = False)
+        run(10000, False, render = False)
     
     q = np.load(name)
     print(q)
