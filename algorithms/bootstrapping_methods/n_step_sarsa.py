@@ -1,6 +1,7 @@
 import numpy as np
 from tqdm import tqdm
 from matplotlib import pyplot as plt
+from algorithms.utils.plots import plot_mean_reward
 
 class n_step_sarsa():
     def __init__(self, n, env, episodes, params):
@@ -70,14 +71,10 @@ class n_step_sarsa():
             self.eps = max(self.eps - self.eps_decay_rate, 0)
             self.rewards_plot[i] = episode_reward
 
-        # plot stuff
-        sum_rewards = np.zeros(self.episodes)
-        for t in range(self.episodes):
-            sum_rewards[t] = np.sum(self.rewards_plot[max(0, int(t - self.episodes / 100)) : (t + 1)])
-        plt.plot(sum_rewards)
         env_name = self.env.spec.id
         s = env_name + "_" + str(self.episodes) + "_episodes_" + str(self.n) + "_step_sarsa"
-        plt.savefig("reward_" + s + ".png")
+        path = "reward_" + s + ".png"
+        plot_mean_reward(self.episodes, self.rewards_plot, path, str(self.n) + "_step")
 
         # save stuff
         name = "learned_q_" + s + ".npy"

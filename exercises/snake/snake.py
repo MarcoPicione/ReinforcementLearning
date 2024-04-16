@@ -153,4 +153,5 @@ class Snake():
 
             print()
         print()
+        print("Score: ", self.score)
 

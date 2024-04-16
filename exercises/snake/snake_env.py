@@ -7,15 +7,12 @@ from gymnasium.utils.env_checker import check_env
 from gymnasium.envs.registration import register
 import numpy as np
 
-def flatten(xss):
-    return [x for xs in xss for x in xs]
-
 register(
     id = "snake-v0",
-    entry_point = "SnakeEnv:SnakeEnv",
+    entry_point = "snake_env:snake_env",
 )
 
-class SnakeEnv(gym.Env):
+class snake_env(gym.Env):
     metadata = {"render_modes" : ["human"], "render_fps" : 1}
 
     def __init__(self, rows, cols, render_mode = None):
@@ -24,8 +21,11 @@ class SnakeEnv(gym.Env):
         self.render_mode = render_mode
         self.snake = s.Snake(rows, cols)
         self.food_counter = 0
-        self.action_space = spaces.Discrete(len(s.SnakeAction) - 1)
-        self.observation_space = spaces.Discrete(2**11)
+
+        nA = len(s.SnakeAction) - 1
+        nS = 2**11
+        self.action_space = spaces.Discrete(nA)
+        self.observation_space = spaces.Discrete(nS)
     
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import SnakeEnv
+import exercises.snake.snake_env as snake_env
 import gymnasium as gym
 from gymnasium import spaces
 from gymnasium.utils.env_checker import check_env
