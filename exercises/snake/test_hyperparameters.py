@@ -29,7 +29,7 @@ def main():
             path = os.path.join(folder, file)
             q_tables.append(np.load(path))
 
-    means = np.zeros(len(q_tables))
+    scores = np.zeros((len(q_tables), num))
     for idx, q in enumerate(q_tables):
         for i in range(num):
             seed = np.random.randint(100, 10000)
@@ -44,10 +44,13 @@ def main():
                 state = new_state
                 score = env.unwrapped.snake.score
             env.close()
-            means[idx] += score
+            scores[idx][i] = score
 
-    for i in range(len(means)):
-        print(files[i], " : ", means[i] / num)
+    means = np.mean(scores, axis = 1)
+    stds =  np.std(scores, axis = 1)
+    for i in range(len(scores)):
+        print(files[i], " : mean_", means[i], "std_", stds[i])
+        print(file)
 
 
     

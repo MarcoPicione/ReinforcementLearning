@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from tqdm import tqdm
-from algorithms.utils.plots import plot_reward
+from algorithms.utils.plots import plot_cumulative_reward
 
 class sarsa():
     def __init__(self, env, episodes, params):
@@ -55,7 +55,7 @@ class sarsa():
         env_name = self.env.spec.id
         s = env_name + "_" + str(self.episodes) + "_episodes_sarsa"
         path = "reward_" + s + ".png"
-        plot_reward(self.episodes, self.rewards, path)
+        plot_cumulative_reward(self.episodes, self.rewards, path)
 
         # save stuff
         name = "learned_q_" + s + ".npy"

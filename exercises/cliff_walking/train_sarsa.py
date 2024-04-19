@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 import gymnasium as gym
 from gym.wrappers import TimeLimit
 from algorithms.bootstrapping_methods.n_step_sarsa import n_step_sarsa
-from algorithms.td_methods.sarsa import sarsa
+from algorithms.temporal_difference_methods.sarsa import sarsa
 from copy import deepcopy
     
 def main():
