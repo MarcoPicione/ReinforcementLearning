@@ -1,7 +1,9 @@
 Exercises/Snake/q_tables/*
 Exercises/Snake/saved_q_tables/*
+Exercises/Snake/saved_dicts/*
 *.png
 *.npy
+*.pkl
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,python
 

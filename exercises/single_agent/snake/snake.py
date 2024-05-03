@@ -19,10 +19,11 @@ class GridTile(Enum):
         return self.name[:1]
     
 class Snake():
-    def __init__(self, rows, cols, seed = None):
+    def __init__(self, rows, cols, nn_trained, seed = None):
         self.rows = rows
         self.cols = cols
         self.snake_body_max = np.inf
+        self.nn_trained = nn_trained
         self.reset(seed)
 
     def reset(self, seed=None):
@@ -131,9 +132,11 @@ class Snake():
         food_left = self.food_pos[1] < self.snake[-1][1]
 
         state = np.array([danger_straight, danger_right, danger_left, dir_l, dir_r, dir_u, dir_d, food_up, food_down, food_right, food_left], dtype = np.int_)
-        state_str = ""
-        for i in state: state_str += str(i)
-        return int(state_str, 2)
+        if not self.nn_trained:
+            state_str = ""
+            for i in state: state_str += str(i)
+            state = int(state_str, 2)
+        return state
 
     def render(self):
         print("\033c")

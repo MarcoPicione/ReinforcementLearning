@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import exercises.snake.snake as s
+import exercises.single_agent.snake.snake as s
 
 import gymnasium as gym
 from gymnasium import spaces
@@ -15,15 +15,15 @@ register(
 class snake_env(gym.Env):
     metadata = {"render_modes" : ["human"], "render_fps" : 1}
 
-    def __init__(self, rows, cols, render_mode = None):
+    def __init__(self, rows, cols, render_mode = None, nn_trained = False):
         self.rows = rows
         self.cols = cols
         self.render_mode = render_mode
-        self.snake = s.Snake(rows, cols)
+        self.snake = s.Snake(rows, cols, nn_trained)
         self.food_counter = 0
 
         nA = len(s.SnakeAction) - 1
-        nS = 2**11
+        nS = 2**11 if not nn_trained else 11
         self.action_space = spaces.Discrete(nA)
         self.observation_space = spaces.Discrete(nS)
     

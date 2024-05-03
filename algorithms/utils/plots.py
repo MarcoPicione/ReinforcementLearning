@@ -12,6 +12,8 @@ def plot_cumulative_reward(episodes, rewards, path, label, same_plot = False):
     plt.xlabel("Episodes")
     plt.legend()
     plt.savefig(path)
+    
+    return sum_rewards
 
 def plot_mean_reward(episodes, rewards, path, label, same_plot = False):
     sum_rewards = np.zeros(episodes)

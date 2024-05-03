@@ -17,6 +17,7 @@ def main():
     is_slippery = False
     env = gym.make('FrozenLake-v1', desc=None, map_name="8x8", is_slippery=is_slippery, render_mode="None")
     env = TimeLimit(env, max_episode_steps=100)
+    env.unwrapped.render_mode = "human"
     trainer = n_step_sarsa(1, env, num_episodes, params)
     trainer.run()
     env.close()

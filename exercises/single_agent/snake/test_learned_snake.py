@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import exercises.snake.snake_env as snake_env
+import exercises.single_agent.snake.snake_env as snake_env
 import gymnasium as gym
 import numpy as np
 import time
@@ -7,7 +7,7 @@ from algorithms.utils.enviroment_tester import enviroment_tester
 
 def main():
     name ="learned_q_snake-v0_100000_episodes_sarsa.npy"
-    name ="learned_q_snake-v0_300000_episodes_2_step_sarsa.npy"
+    #name ="learned_q_snake-v0_300000_episodes_2_step_sarsa.npy"
 
     q = np.load(name)
     seed = np.random.randint(100, 10000)

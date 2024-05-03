@@ -19,7 +19,7 @@ def main():
     is_slippery = False
     env = gym.make("CliffWalking-v0")
     env = TimeLimit(env, max_episode_steps=1000)
-    trainer = n_step_sarsa(10, env, num_episodes, params)
+    trainer = sarsa(env, num_episodes, params, save_cumulative_reward = True)
     trainer.run()
     env.close()
 

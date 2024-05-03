@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import exercises.snake.snake_env as snake_env
+import exercises.single_agent.snake.snake_env as snake_env
 import gymnasium as gym
 from gymnasium import spaces
 from gymnasium.utils.env_checker import check_env
@@ -23,7 +23,7 @@ def main():
              'eps_decay_rate' : 1 / num_episodes
             }
     
-    trainer = n_step_sarsa(1, env, num_episodes, params)
+    trainer = sarsa(env, num_episodes, params)
     trainer.run()
     env.close()   
 

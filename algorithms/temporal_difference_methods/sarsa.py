@@ -4,13 +4,14 @@ from tqdm import tqdm
 from algorithms.utils.plots import plot_cumulative_reward
 
 class sarsa():
-    def __init__(self, env, episodes, params):
+    def __init__(self, env, episodes, params, save_cumulative_reward = False):
         self.env = env
         self.episodes = episodes
         self.eps = params['eps']
         self.lr = params['learning_rate']
         self.df = params['discount_factor']
         self.eps_decay_rate = params['eps_decay_rate']
+        self.save_cumulative_reward = save_cumulative_reward
         self.rng = np.random.default_rng() 
         self.q = np.zeros((self.env.observation_space.n, self.env.action_space.n))
         self.pi = np.zeros((self.env.observation_space.n)).astype(np.int_)
@@ -55,10 +56,14 @@ class sarsa():
         env_name = self.env.spec.id
         s = env_name + "_" + str(self.episodes) + "_episodes_sarsa"
         path = "reward_" + s + ".png"
-        plot_cumulative_reward(self.episodes, self.rewards, path)
+        cumulative_reward = plot_cumulative_reward(self.episodes, self.rewards, path, "Sarsa")
 
         # save stuff
         name = "learned_q_" + s + ".npy"
         np.save(name, self.q)
         name = "learned_policy_" + s + ".npy"
         np.save(name, self.pi)
+
+        if self.save_cumulative_reward:
+            name = "cumulative_reward_" + s + ".npy"
+            np.save(name, cumulative_reward)
